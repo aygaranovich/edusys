@@ -1,0 +1,58 @@
+// Запуск сервера
+cd python/code/edusys
+python3 manage.py runserver
+http://127.0.0.1:8000/
+
+//обновление базы данных (запуск миграций)
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+//войти в бд
+mysql -u django -p
+SHOW DATABASES;
+
+//создать шаблон сайта
+django-admin startproject edusys
+cd edusys
+
+//создать приложение
+python3 manage.py startapp education
+
+-----------------------------------------------------
+
+!!! как перевести проект Django с SQLite на MySQL !!!
+
+//Установка сервера и консольного клиента MySQL
+sudo apt-get install mysql-server mysql-client
+
+//python3-dev
+sudo apt-get install python3-dev
+
+//Создание базы данных для работы веб-приложения Django
+mysql -u root -p
+
+//создание бд
+CREATE DATABASE edusys DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+
+//Создание отдельного пользователя для Django в MySQL
+mysql> CREATE USER 'django'@'localhost' IDENTIFIED BY 'password';
+mysql> GRANT ALL PRIVILEGES ON edusys.* TO 'django'@'localhost';
+mysql> FLUSH PRIVILEGES;
+
+SELECT User,Host FROM mysql.user;
+
+//выход из MySQL - CTRL + D
+
+//Установка библиотек и пакетов, необходимых для работы с MySQL из Python:
+sudo apt-get install python3-dev libmysqlclient-dev build-essential
+pip3 install mysqlclient
+
+//Создание дампа данных:
+python3 manage.py dumpdata --indent=2 --exclude=contenttypes > datadump.json
+
+//Изменение настроек проекта на использование MySQL:
+//Проведите миграции в Django и загрузите данные
+
+//перезапуск MySQL
+systemctl daemon-reload
+systemctl restart mysql
